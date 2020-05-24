@@ -201,7 +201,7 @@ class FileGenerator {
       } else if (type.startsWith('\$')) {
         return '$type.fromMap($argument)';
       } else if (type.toLowerCase().startsWith('bool')) {
-        return 'm[\'$argument\'] == 1';
+        return '$argument == 1';
       } else if (type.startsWith('List')) {
         final buffer = new StringBuffer();
         buffer.write('(m[\'$name\'] as Map).values');

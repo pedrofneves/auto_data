@@ -200,6 +200,8 @@ class FileGenerator {
         return 'DateTime.fromMillisecondsSinceEpoch($argument)';
       } else if (type.startsWith('\$')) {
         return '$type.fromMap($argument)';
+      } else if (type.toLowerCase().startsWith('bool')) {
+        return 'm[\'$argument\'] == 1';
       } else if (type.startsWith('List')) {
         final buffer = new StringBuffer();
         buffer.write('(m[\'$name\'] as Map).values');
@@ -241,6 +243,8 @@ class FileGenerator {
         return '$name.millisecondsSinceEpoch';
       } else if (type.startsWith('\$')) {
         return '$name.toMap()';
+      } else if (type.toLowerCase().startsWith('bool')) {
+        return '$name == true ? 1 : 0';
       } else if (type.startsWith('List')) {
         final buffer = new StringBuffer();
         buffer.write('Map.fromIterable($name,');
@@ -252,7 +256,8 @@ class FileGenerator {
           buffer.write('key: (m) => $key, value: (m) => $converter)');
           return buffer.toString();
         } else {
-          throw Exception('No type specified for List. Are you sure you imported necessary data models?');
+          throw Exception(
+              'No type specified for List. Are you sure you imported necessary data models?');
         }
       } else if (isEnum) {
         return '$name.index';
@@ -280,7 +285,8 @@ class FileGenerator {
 
   static StringBuffer _generateFromJson(DataClass c) {
     final buffer = new StringBuffer();
-    buffer.writeln('factory ${c.name}.fromJson(String json) => ${c.name}.fromMap(jsonDecode(json));');
+    buffer.writeln(
+        'factory ${c.name}.fromJson(String json) => ${c.name}.fromMap(jsonDecode(json));');
     return buffer;
   }
 
